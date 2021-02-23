@@ -96,22 +96,32 @@ class Player extends Object {
     movePlayer(keyCode, speed) {
         switch (keyCode) {
             case 37:
-                if(this.posX < 50) {
-                    this.posX = 50
+                if(this.posX <= 30) {
+                    this.posX = 30
                     return;  
                 } 
               this.posX -= speed;
               break;
             case 38:
+                if (this.posY <= 600) {
+                    this.posY = 600
+                    return;
+                }
                 if(this.posY < 570) return;
               this.posY -= speed;
               break;
             case 39:
-                if(this.posX > this.canvas.width - 120) return;
+                if(this.posX >= this.canvas.width - 80) {
+                    this.posX = this.canvas.width - 80
+                    return
+                }
               this.posX += speed;
               break;
             case 40:
-                if(this.posY < 100) return;
+                if(this.posY >= 1110) {
+                    this.posY = 1110
+                    return;
+                }
               this.posY += speed;
               break;
             default:
