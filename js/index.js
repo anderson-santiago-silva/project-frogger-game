@@ -13,7 +13,7 @@ class Game {
         this.obstacleredSpeed = 5;
         this.obstacleGreyConstructor = obstacleGreyConstructor;
         this.obstaclesGrey = [];
-        this.obstaclegreySpeed = 5;
+        this.obstaclegreySpeed = 7;
         this.newObstaclesFPS = 120;
         this.frogSpeed = {
             initialSpeed: 0,
