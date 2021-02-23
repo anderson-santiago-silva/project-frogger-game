@@ -1,8 +1,3 @@
-////// Incluir o Winner //////
-////// Incluir o restart //////
-///// Ajustar navegação //////
-///// Ajustar sistema de pontos /////
-//// Incluir setTimout randomico para os obstáculos /////
 
 class Game {
     constructor(canvas, context, field, player, obstacleblueConstructor,  obstacleRedConstructor, obstacleGreyConstructor) {
@@ -18,7 +13,7 @@ class Game {
         this.obstacleredSpeed = 5;
         this.obstacleGreyConstructor = obstacleGreyConstructor;
         this.obstaclesGrey = [];
-        this.obstaclegreySpeed = 10;
+        this.obstaclegreySpeed = 7;
         this.newObstaclesFPS = 120;
         this.frogSpeed = {
             initialSpeed: 0,
