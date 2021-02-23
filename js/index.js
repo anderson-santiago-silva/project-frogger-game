@@ -79,7 +79,7 @@ class Game {
         const obstacleBlueImg = new Image();
         obstacleBlueImg.src = './images/blueCar.png';
         if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstacles = new this.obstacleblueConstructor(this.canvas, this.context, this.canvas.width, 975, 300, 140, obstacleBlueImg);
+            const newObstacles = new this.obstacleblueConstructor(this.canvas, this.context, this.canvas.width, 990, 200, 100, obstacleBlueImg);
             this.obstaclesBlue.push(newObstacles);
         }
     }
@@ -108,7 +108,7 @@ class Game {
         const obstacleRedImg = new Image();
         obstacleRedImg.src = './images/redCar.png';
         if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesRed = new this.obstacleRedConstructor(this.canvas, this.context, this.canvas.width, 850, 240, 129, obstacleRedImg);
+            const newObstaclesRed = new this.obstacleRedConstructor(this.canvas, this.context, this.canvas.width + 200, 850, 200, 100, obstacleRedImg);
             this.obstaclesRed.push(newObstaclesRed);
         }
     }
@@ -137,7 +137,7 @@ class Game {
         const obstacleGreyImg = new Image();
         obstacleGreyImg.src = './images/greyCar.png';
         if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 670, 240, 160, obstacleGreyImg);
+            const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 690, 220, 110, obstacleGreyImg);
             this.obstaclesGrey.push(newObstaclesGrey);
         }
     }
@@ -171,7 +171,7 @@ class Game {
     }
 
     drawScore() {
-        this.context.fillText(`SCORE: ${this.score.points}`, 25, 50);
+        this.context.fillText(`SCORE: ${this.score.points}`, 50, 100);
     }
 
     showFinalGameStats() {
@@ -183,7 +183,6 @@ class Game {
 
             this.context.fillStyle = 'balck';
             this.context.fillText(`Your final score is: ${this.score.points}`, this.canvas.width / 2, this.canvas.height / 3 + 140);
-
         }, 1000);
     }
     
@@ -204,7 +203,7 @@ window.onload = () => {
         frogImg.onload = () => {
         const field = new Field(canvas, context, 0, 0, canvas.width, canvas.height, fieldImg);
         
-        const player = new Player(canvas, context, 800, 1070, 80, 160, frogImg);
+        const player = new Player(canvas, context, 800, 1110, 50, 70, frogImg);
        
         const game = new Game(canvas, context, field, player, ObstaclesBlue, ObstaclesRed, ObstaclesGrey);
         
