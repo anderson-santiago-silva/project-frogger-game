@@ -1,202 +1,148 @@
-/* Regras do jogo:
-    Posição inicial do frog, obstáculos, speed dos obstaculos, metodo start, verificação de gameOver, display de resultado, contagem de pontuação, player, field)
-*/
 
-class Game {
-    constructor(canvas, context, field, player, obstacleblueConstructor,  obstacleRedConstructor, obstacleGreyConstructor) {
+class Object {
+    constructor(canvas, context, posX, posY, width, height) {
         this.canvas = canvas;
         this.context = context;
-        this.field = field;
-        this.player = player;
-        this.obstacleblueConstructor = obstacleblueConstructor;
-        this.obstaclesBlue = [];
-        this.obstacleblueSpeed = 5;
-        this.obstacleRedConstructor = obstacleRedConstructor;
-        this.obstaclesRed = [];
-        this.obstacleredSpeed = 5;
-        this.obstacleGreyConstructor = obstacleGreyConstructor;
-        this.obstaclesGrey = [];
-        this.obstaclegreySpeed = 5;
-        this.newObstaclesFPS = 120;
-        this.frogSpeed = {
-            initialSpeed: 0,
-            speedIncrement: 1,      ////// REVISISTAR ////////
-        };
-        this.frames = 0;
-        this.isGamesOver = false;
-        this.aimationId = 0;
-        this.score = {
-            points: 0,
-            pointsIncrmentFPS: 30,
-        }
-        this.context.font = '40px Comisc Sans';
-        this. context.fillStyle='red';
-        
-
-    }
-    
-    configureKeyboardControls() {
-        document.onkeydown = (event) => {
-            this.frogSpeed.initialSpeed += this.frogSpeed.speedIncrement;      ////// REVISISTAR ////////
-            
-            this.player.movePlayer(event.keyCode, this.frogSpeed.initialSpeed);   ////// REVISISTAR ////////
-        };
+        this.posX = posX;
+        this.posY = posY;
+        this.width = width;
+        this.height = height;
     }
 
-    startGame() {
-        this.field.drawField();
-        this.player.drawPlayer();
-       
-        this.creatObstaclesBlue();
-        this.moveObstaclesBlue();
-        this.checkClearObstaclesBlue();
-        
-        this.creatObstaclesRed();
-        this.moveObstaclesRed();
-        this.checkClearObstaclesRed();
-        
-        this.creatObstaclesGrey();
-        this.moveObstaclesGrey();
-        this.checkClearObstaclesGrey();
-        
-        this.checkCollisionBlue();
-        this.checkCollisionRed();
-        this.checkCollisionGrey();
-
-        this.updateScore();
-        
-        this.frames += 1;
-        
-        if (this.isGamesOver) {
-            window.cancelAnimationFrame(this.animationId);
-        } else {
-            this.animationId = window.requestAnimationFrame(() => this.startGame());
-        }
-
+    top () {
+        return this.posY;
+    } 
+    bottom() {
+        return this.posY + this.height;
     }
-    
-    creatObstaclesBlue() {
-        const obstacleBlueImg = new Image();
-        obstacleBlueImg.src = './images/blueCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstacles = new this.obstacleblueConstructor(this.canvas, this.context, this.canvas.width, 975, 300, 140, obstacleBlueImg);
-            this.obstaclesBlue.push(newObstacles);
-        }
+    left() {
+        return this.posX;
     }
-    moveObstaclesBlue() {
-        this.obstaclesBlue.forEach((obstacle) => {
-            obstacle.drawObstacleBlue();
-            obstacle.moveObstacleBlue(this.obstacleblueSpeed);
-        });
+    right() {
+        return this.posX + this.width;
     }
-    checkClearObstaclesBlue() {
-        this.obstaclesBlue.forEach((obstacle, index) => {
-            if (obstacle.posX <= -300) {
-                this.obstaclesBlue.splice(index, 1);
-            }
-        });
-    }
-    checkCollisionBlue() {
-        this.obstaclesBlue.forEach((obstacle) => {
-            if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
-            }
-        });
-    }
-    
-    creatObstaclesRed() {
-        const obstacleRedImg = new Image();
-        obstacleRedImg.src = './images/redCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesRed = new this.obstacleRedConstructor(this.canvas, this.context, this.canvas.width, 850, 240, 129, obstacleRedImg);
-            this.obstaclesRed.push(newObstaclesRed);
-        }
-    }
-    moveObstaclesRed() {
-        this.obstaclesRed.forEach((obstacle) => {
-            obstacle.drawObstacleRed();
-            obstacle.moveObstacleRed(this.obstacleredSpeed);
-        });
-    }
-    checkClearObstaclesRed() {
-        this.obstaclesRed.forEach((obstacle, index) => {
-            if (obstacle.posX <= -240) {
-                this.obstaclesRed.splice(index, 1);
-            }
-        });
-    }
-    checkCollisionRed() {
-        this.obstaclesRed.forEach((obstacle) => {
-            if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
-            }
-        });
-    }
-    
-    creatObstaclesGrey() {
-        const obstacleGreyImg = new Image();
-        obstacleGreyImg.src = './images/greyCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 670, 240, 160, obstacleGreyImg);
-            this.obstaclesGrey.push(newObstaclesGrey);
-        }
-    }
-    moveObstaclesGrey() {
-        this.obstaclesGrey.forEach((obstacle) => {
-            obstacle.drawObstacleGrey();
-            obstacle.moveObstacleGrey(this.obstaclegreySpeed);
-        });
-    }
-    checkClearObstaclesGrey() {
-        this.obstaclesGrey.forEach((obstacle, index) => {
-            if (obstacle.posX <= -240) {
-                this.obstaclesGrey.splice(index, 1);
-            }
-        });
-    }
-    checkCollisionGrey() {
-        this.obstaclesGrey.forEach((obstacle) => {
-            if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
-            }
-        });
+    crashWith(obstacle) {
+        return !(this.bottom() < obstacle.top() || this.top() > obstacle.bottom() || this.right() < obstacle.left() || this.left() > obstacle.right());
     }
 
-    updateScore() {
-        if (this.frames % this.score.pointsIncrmentFPS) {
-            this.score.points += 1;
-        }
-
-        this.drawScore();
-    }
-
-    drawScore() {
-        this.context.fillText(`SCORE: ${this.score.points}`, 25, 50);
+    getPositionY () {
+        return this.posY
     }
 
 }
 
-window.onload = () => {
-    const canvas = document.querySelector('canvas');
-    const context = canvas.getContext('2d');
+class Field extends Object {
+    constructor(canvas, context, posX, posY, width, height, image){
+        super(canvas, context, posX, posY, width, height);
+        this.image = image;
+    }
 
-    const fieldImg = new Image();
-    fieldImg.src = './images/road.png';
+    drawField() {
+        this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);        
+    }
+}
 
-    const frogImg = new Image();
-    frogImg.src = './images/frog.png';
+class ObstaclesBlue extends Object {
+    constructor(canvas, context, posX, posY, width, height, image){
+        super(canvas, context, posX, posY, width, height);
+        this.image = image;
+    }
 
-    fieldImg.onload = () => {
-        frogImg.onload = () => {
-        const field = new Field(canvas, context, 0, 0, canvas.width, canvas.height, fieldImg);
+    drawObstacleBlue(){
+        this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
+    }
+
+    moveObstacleBlue(speed) {
+        this.posX -= speed;
+    }
+}
+
+class ObstaclesRed extends Object {
+    constructor(canvas, context, posX, posY, width, height, image){
+        super(canvas, context, posX, posY, width, height);
+        this.image = image;
+    }
+
+    drawObstacleRed(){
+        this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
+    }
+
+    moveObstacleRed(speed) {
+        this.posX -= speed;
+    }
+}
+
+class ObstaclesGrey extends Object {
+    constructor(canvas, context, posX, posY, width, height, image){
+        super(canvas, context, posX, posY, width, height);
+        this.image = image;
+    }
+
+    drawObstacleGrey(){
+        this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
+    }
+
+    moveObstacleGrey(speed) {
+        this.posX += speed;
+    }
+}
+
+class Player extends Object {
+    constructor(canvas, context, posX, posY, width, height, image){
+        super(canvas, context, posX, posY, width, height);
+        this.image = image;
+        this.direction = 'N';
+    }
+
+    drawPlayer() {
+        this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
+    }
+
+    movePlayer(keyCode, speed) {
+        switch (keyCode) {
+            case 37:
+                if(this.posX <= 30) {
+                    this.posX = 30
+                    return;
+                } 
+                this.direction = 'W'
+              this.posX -= speed;
+              break;
+            case 38:
+                if (this.posY <= 600) {
+                    this.posY = 600
+                    return;
+                }
+                this.direction = 'N'
+                if(this.posY < 570) return;
+              this.posY -= speed;
+              break;
+            case 39:
+                if(this.posX >= this.canvas.width - 80) {
+                    this.posX = this.canvas.width - 80
+                    return
+                }
+                this.direction = 'L'
+              this.posX += speed;
+              break;
+            case 40:
+                if(this.posY >= 1110) {
+                    this.posY = 1110
+                    return;
+                }
+                this.direction = 'S'
+              this.posY += speed;
+              break;
+            default:
+                console.log('Invalid Key')
+        }
         
-        const player = new Player(canvas, context, 800, 1070, 80, 160, frogImg);
-       
-        const game = new Game(canvas, context, field, player, ObstaclesBlue, ObstaclesRed, ObstaclesGrey);
-        
-        game.configureKeyboardControls();
-        game.startGame();
-    };
-    }; 
-};
+        this.rotatePlayer() 
+    }
 
+    rotatePlayer() {
+        
+    }
+
+
+}

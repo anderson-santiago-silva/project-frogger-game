@@ -25,6 +25,10 @@ class Object {
         return !(this.bottom() < obstacle.top() || this.top() > obstacle.bottom() || this.right() < obstacle.left() || this.left() > obstacle.right());
     }
 
+    getPositionY () {
+        return this.posY
+    }
+
 }
 
 class Field extends Object {
@@ -87,6 +91,7 @@ class Player extends Object {
     constructor(canvas, context, posX, posY, width, height, image){
         super(canvas, context, posX, posY, width, height);
         this.image = image;
+        this.direction = 'N';
     }
 
     drawPlayer() {
@@ -98,7 +103,7 @@ class Player extends Object {
             case 37:
                 if(this.posX <= 30) {
                     this.posX = 30
-                    return;  
+                    return;
                 } 
               this.posX -= speed;
               break;
@@ -125,8 +130,9 @@ class Player extends Object {
               this.posY += speed;
               break;
             default:
-            console.log('Invalid Key')
-        } 
+                console.log('Invalid Key')
+        }
         
     }
+
 }

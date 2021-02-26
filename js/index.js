@@ -1,8 +1,9 @@
-////// Incluir o Winner //////
-////// Incluir o restart //////
-///// Ajustar navegação //////
+///// Incluir o Winner //////   --- OK
+///// Rotacionar player /////
+///// Incluir o restart //////
+///// Ajustar navegação //////  --- MAIS OU MENOS 
 ///// Ajustar sistema de pontos /////
-//// Incluir setTimout randomico para os obstáculos /////
+///// Incluir setTimout randomico para os obstáculos /////  --- MAIS OU MENOS
 
 class Game {
     constructor(canvas, context, field, player, obstacleblueConstructor,  obstacleRedConstructor, obstacleGreyConstructor) {
@@ -15,34 +16,36 @@ class Game {
         this.obstacleblueSpeed = 5;
         this.obstacleRedConstructor = obstacleRedConstructor;
         this.obstaclesRed = [];
-        this.obstacleredSpeed = 5;
+        this.obstacleredSpeed = 10;
         this.obstacleGreyConstructor = obstacleGreyConstructor;
         this.obstaclesGrey = [];
         this.obstaclegreySpeed = 10;
-        this.newObstaclesFPS = 120;
+        this.newObstaclesFPS = [120, 60];
+        this.newObstcleFPSindex = 0;
         this.frogSpeed = {
-            initialSpeed: 0,
-            speedIncrement: 1,      ////// REVISISTAR ////////
+            initialSpeed: 70,
+            speedIncrement: 0,      ////// REVISISTAR ////////
         };
         this.frames = 0;
-        this.isGamesOver = false;
-        this.aimationId = 0;
+        this.isGameOver = false;
+        this.winnerGame = false;
         this.score = {
             points: 0,
             pointsIncrmentFPS: 30,
         }
         this.context.font = '60px Comisc Sans';
         this. context.fillStyle='red';
-        
+        this.rotate = 0;
 
     }
     
     configureKeyboardControls() {
         document.onkeydown = (event) => {
-            if (!this.isGamesOver) {
+            if (!this.isGameOver || this.winnerGame) {
             this.frogSpeed.initialSpeed += this.frogSpeed.speedIncrement;      ////// REVISISTAR ////////
             
             this.player.movePlayer(event.keyCode, this.frogSpeed.initialSpeed);   ////// REVISISTAR ////////
+            
             }
         };
     }
@@ -67,11 +70,15 @@ class Game {
         this.checkCollisionRed();
         this.checkCollisionGrey();
 
+        this.winnerPlayer();
+
+        //this.rotatePlayer();
+
         this.updateScore();
         
         this.frames += 1;
         
-        if (this.isGamesOver) {
+        if (this.isGameOver || this.winnerGame) {
             window.cancelAnimationFrame(this.animationId);
             this.showFinalGameStats();
         } else {
@@ -83,8 +90,9 @@ class Game {
     creatObstaclesBlue() {
         const obstacleBlueImg = new Image();
         obstacleBlueImg.src = './images/blueCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstacles = new this.obstacleblueConstructor(this.canvas, this.context, this.canvas.width, 990, 200, 100, obstacleBlueImg);
+        if (this.frames % this.newObstaclesFPS[this.newObstcleFPSindex] === 0) {
+            this.newObstcleFPSindex = Math.floor(Math.random() * this.newObstaclesFPS.length) 
+            const newObstacles = new this.obstacleblueConstructor(this.canvas, this.context, this.canvas.width, 995, 200, 95, obstacleBlueImg);
             this.obstaclesBlue.push(newObstacles);
         }
     }
@@ -104,16 +112,17 @@ class Game {
     checkCollisionBlue() {
         this.obstaclesBlue.forEach((obstacle) => {
             if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
+              this.isGameOver = true;
             }
         });
     }
     
     creatObstaclesRed() {
         const obstacleRedImg = new Image();
-        obstacleRedImg.src = './images/redCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesRed = new this.obstacleRedConstructor(this.canvas, this.context, this.canvas.width + 200, 850, 200, 100, obstacleRedImg);
+        obstacleRedImg.src = './images/policeCar.png';
+        if (this.frames % this.newObstaclesFPS[this.newObstcleFPSindex] === 0) {
+            this.newObstcleFPSindex = Math.floor(Math.random() * this.newObstaclesFPS.length)
+            const newObstaclesRed = new this.obstacleRedConstructor(this.canvas, this.context, this.canvas.width + 200, 850, 200, 115, obstacleRedImg);
             this.obstaclesRed.push(newObstaclesRed);
         }
     }
@@ -133,7 +142,7 @@ class Game {
     checkCollisionRed() {
         this.obstaclesRed.forEach((obstacle) => {
             if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
+              this.isGameOver = true;
             }
         });
     }
@@ -141,8 +150,10 @@ class Game {
     creatObstaclesGrey() {
         const obstacleGreyImg = new Image();
         obstacleGreyImg.src = './images/greyCar.png';
-        if (this.frames % this.newObstaclesFPS === 0) {
-            const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 690, 220, 110, obstacleGreyImg);
+        console.log(this.newObstaclesFPS[this.newObstcleFPSindex]);
+        if (this.frames % this.newObstaclesFPS[this.newObstcleFPSindex] === 0) {
+            this.newObstcleFPSindex = Math.floor(Math.random() * this.newObstaclesFPS.length)
+            const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 690, 218, 120, obstacleGreyImg);
             this.obstaclesGrey.push(newObstaclesGrey);
         }
     }
@@ -154,7 +165,7 @@ class Game {
     }
     checkClearObstaclesGrey() {
         this.obstaclesGrey.forEach((obstacle, index) => {
-            if (obstacle.posX <= -240) {
+            if (obstacle.posX > this.canvas.width) {
                 this.obstaclesGrey.splice(index, 1);
             }
         });
@@ -162,13 +173,13 @@ class Game {
     checkCollisionGrey() {
         this.obstaclesGrey.forEach((obstacle) => {
             if (this.player.crashWith(obstacle)) {
-              this.isGamesOver = true;
+              this.isGameOver = true;
             }
         });
     }
 
     updateScore() {
-        if (this.frames % this.score.pointsIncrmentFPS) {
+       if (this.frames % this.score.pointsIncrmentFPS) {
             this.score.points += 1;
         }
 
@@ -180,17 +191,56 @@ class Game {
     }
 
     showFinalGameStats() {
+        if (this.isGameOver == true) {
         setTimeout(() => {
+            this.context.fillStyle = 'rgb(200,94,70)';
+                this.context.fillRect(350, 300, 1010, 300);
             this.context.textAlign='center';
             this.context.font = '100px Comic Sans';
-            this.context.fillStyle = 'red';
-            this.context.fillText('Games Over', this.canvas.width / 2, this.canvas.height / 3);
+            this.context.fillStyle = 'white';
+            this.context.fillText('Game Over!', this.canvas.width / 2, this.canvas.height / 3);
 
             this.context.fillStyle = 'balck';
             this.context.fillText(`Your final score is: ${this.score.points}`, this.canvas.width / 2, this.canvas.height / 3 + 140);
         }, 1000);
+        } 
+            if (this.winnerGame == true) {
+            setTimeout(() => {
+                this.context.fillStyle = 'rgb(91,150,70)';
+                this.context.fillRect(350, 300, 1010, 300);
+                this.context.textAlign='center';
+                this.context.font = '100px Comic Sans';
+                this.context.fillStyle = 'white';
+                this.context.fillText('You win!', this.canvas.width / 2, this.canvas.height / 3);
+                
+
+                this.context.fillStyle = 'white';
+                this.context.fillText(`Your final score is: ${this.score.points}`, this.canvas.width / 2, this.canvas.height / 3 + 140);
+            }, 1000);
+        }
+    }
+
+    winnerPlayer() {
+        const position = this.player.getPositionY()
+       
+        if (position == 600) {
+            this.winnerGame = true;
+            
+        }
     }
     
+    rotatePlayer() {
+
+            // document.addEventListener("click", function(){
+            
+            // if(rotate == 360){rotate = 0} //Verificamos se o valor da variável rotate é 360, se for zeramos o valor.
+        
+            // rotate = -90; //Fazemoz um incremento de 30, ou seja se antes tinha 0 e incrementamos 30 temos o valor de 30, na próxima execução se temos 30 e incrementamos mais 30, vamos para 60 e assim por diante.
+            
+            // document.getElementById("frogRotate").style.transform = "rotate("+rotate+"deg)"; //Acessamos o elemento img e através do style.transform atribuimos o rotate com o valor atual de nossa variável.
+
+            // });
+    }
 
 }
 
@@ -202,7 +252,7 @@ window.onload = () => {
     fieldImg.src = './images/road.png';
 
     const frogImg = new Image();
-    frogImg.src = './images/frog.png';
+    frogImg.src = './images/frogN.png';
 
     fieldImg.onload = () => {
         frogImg.onload = () => {
