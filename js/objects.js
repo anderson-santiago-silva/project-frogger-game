@@ -91,7 +91,6 @@ class Player extends Object {
     constructor(canvas, context, posX, posY, width, height, image){
         super(canvas, context, posX, posY, width, height);
         this.image = image;
-        this.direction = 'N';
     }
 
     drawPlayer() {

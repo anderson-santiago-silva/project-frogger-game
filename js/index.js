@@ -4,6 +4,7 @@
 ///// Ajustar navegação //////  --- MAIS OU MENOS 
 ///// Ajustar sistema de pontos /////
 ///// Incluir setTimout randomico para os obstáculos /////  --- MAIS OU MENOS
+///// Colocar trilha sonora //////   --- MAIS OU MENOS
 
 class Game {
     constructor(canvas, context, field, player, obstacleblueConstructor,  obstacleRedConstructor, obstacleGreyConstructor) {
@@ -35,8 +36,6 @@ class Game {
         }
         this.context.font = '60px Comisc Sans';
         this. context.fillStyle='red';
-        this.rotate = 0;
-
     }
     
     configureKeyboardControls() {
@@ -72,10 +71,8 @@ class Game {
 
         this.winnerPlayer();
 
-        //this.rotatePlayer();
-
         this.updateScore();
-        
+
         this.frames += 1;
         
         if (this.isGameOver || this.winnerGame) {
@@ -150,7 +147,6 @@ class Game {
     creatObstaclesGrey() {
         const obstacleGreyImg = new Image();
         obstacleGreyImg.src = './images/greyCar.png';
-        console.log(this.newObstaclesFPS[this.newObstcleFPSindex]);
         if (this.frames % this.newObstaclesFPS[this.newObstcleFPSindex] === 0) {
             this.newObstcleFPSindex = Math.floor(Math.random() * this.newObstaclesFPS.length)
             const newObstaclesGrey = new this.obstacleGreyConstructor(this.canvas, this.context, -240, 690, 218, 120, obstacleGreyImg);
@@ -229,19 +225,6 @@ class Game {
         }
     }
     
-    rotatePlayer() {
-
-            // document.addEventListener("click", function(){
-            
-            // if(rotate == 360){rotate = 0} //Verificamos se o valor da variável rotate é 360, se for zeramos o valor.
-        
-            // rotate = -90; //Fazemoz um incremento de 30, ou seja se antes tinha 0 e incrementamos 30 temos o valor de 30, na próxima execução se temos 30 e incrementamos mais 30, vamos para 60 e assim por diante.
-            
-            // document.getElementById("frogRotate").style.transform = "rotate("+rotate+"deg)"; //Acessamos o elemento img e através do style.transform atribuimos o rotate com o valor atual de nossa variável.
-
-            // });
-    }
-
 }
 
 window.onload = () => {
@@ -253,7 +236,7 @@ window.onload = () => {
 
     const frogImg = new Image();
     frogImg.src = './images/frogN.png';
-
+    
     fieldImg.onload = () => {
         frogImg.onload = () => {
         const field = new Field(canvas, context, 0, 0, canvas.width, canvas.height, fieldImg);
