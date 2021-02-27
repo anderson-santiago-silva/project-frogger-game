@@ -11,3 +11,7 @@ Use the arrow keys on your keyboard to move the frog and help it cross it to the
  - Use arrow **DOWN** to move the frog down.
  - Use arrow **LEFT** to move the frog left.
  - Use arrow **RIGHT** to moce the frog right.
+
+ ### PLAY NOW
+
+ Click here to go to the game!
