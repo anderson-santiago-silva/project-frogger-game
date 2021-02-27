@@ -14,4 +14,4 @@ Use the arrow keys on your keyboard to move the frog and help it cross it to the
 
  ### PLAY NOW
 
- Click [here](https://https://anderson-santiago-silva.github.io/project-frogger-game/index.html) to play!
+ Click [here](https://anderson-santiago-silva.github.io/project-frogger-game/index.html) to play!
