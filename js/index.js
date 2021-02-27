@@ -1,11 +1,3 @@
-///// Incluir o Winner //////   --- OK
-///// Rotacionar player /////
-///// Incluir o restart //////
-///// Ajustar navegação //////  --- MAIS OU MENOS 
-///// Ajustar sistema de pontos /////
-///// Incluir setTimout randomico para os obstáculos /////  --- MAIS OU MENOS
-///// Colocar trilha sonora //////   --- MAIS OU MENOS
-
 class Game {
     constructor(canvas, context, field, player, obstacleblueConstructor,  obstacleRedConstructor, obstacleGreyConstructor) {
         this.canvas = canvas;
@@ -25,7 +17,7 @@ class Game {
         this.newObstcleFPSindex = 0;
         this.frogSpeed = {
             initialSpeed: 70,
-            speedIncrement: 0,      ////// REVISISTAR ////////
+            speedIncrement: 0,      
         };
         this.frames = 0;
         this.isGameOver = false;
@@ -41,9 +33,9 @@ class Game {
     configureKeyboardControls() {
         document.onkeydown = (event) => {
             if (!this.isGameOver || this.winnerGame) {
-            this.frogSpeed.initialSpeed += this.frogSpeed.speedIncrement;      ////// REVISISTAR ////////
+            this.frogSpeed.initialSpeed += this.frogSpeed.speedIncrement;      
             
-            this.player.movePlayer(event.keyCode, this.frogSpeed.initialSpeed);   ////// REVISISTAR ////////
+            this.player.movePlayer(event.keyCode, this.frogSpeed.initialSpeed);   
             
             }
         };
